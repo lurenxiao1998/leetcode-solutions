@@ -10,7 +10,6 @@ public:
       }
     }
     nums.insert(nums.begin() + idx, target);
-    lower_bound(nums.begin(),nums.end(),target);
     return idx;
   }
 };
