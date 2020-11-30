@@ -16,17 +16,10 @@ public:
       q.pop();
       if (max_e % 2 == 1)
         return bound;
-
-      if (max_e / 2 < a) {
-        q.push(max_e / 2);
+      if (max_e / 2 < a) 
         a = max_e / 2;
-      } else {
-        q.push(max_e / 2);
-      }
-
+      q.push(max_e / 2);
       bound = min(q.top() - a, bound);
-      if (bound == 0)
-        return 0;
     }
     return bound;
   }
