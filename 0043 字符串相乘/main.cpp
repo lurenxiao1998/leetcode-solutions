@@ -1,44 +1,66 @@
 #include <bits/stdc++.h>
 using namespace std;
 class Solution {
+private:
+  string strAdd(string num1, string num2) {
+    int n1size = num1.size();
+    int n2size = num2.size();
+    string res;
+    int jw = 0;
+    int r = 0;
+    for (int i = 0; i < n1size && i < n2size; i++) {
+      r = num1[n1size - i - 1] + num2[n2size - i - 1] - 2 * '0' + jw;
+      jw = r / 10;
+      res.push_back(r % 10 + '0');
+    }
+    if (n1size < n2size) {
+      for (int i = n1size; i < n2size; i++) {
+        r = jw + num2[n2size - i - 1] - '0';
+        jw = r / 10;
+        res.push_back(r%10 + '0');
+      }
+    } else if (n1size > n2size) {
+      for (int i = n2size; i < n1size; i++) {
+        r = jw + num1[n1size - i - 1] - '0';
+        jw = r / 10;
+        res.push_back(r%10 + '0');
+      }
+    }
+
+    if (jw != 0)
+      res.push_back(jw + '0');
+    reverse(res.begin(), res.end());
+    return res;
+  }
+
 public:
   string multiply(string num1, string num2) {
-    string r = "";
-    string base = "";
-    for (size_t i = num1.size()-1; i >=0 ; i--) {
-      int j = 0;
-      int n1 = num1[i] - '0';
-      int carry = 0;
-      int remainder = 0;
-      string tmp = "";
-      string tmpsum = "";
-      for (j = num2.size()-1; j >= 0; j--) {
-        int n2 = num2[j] - '0';
-        remainder = (n1 * n2 + carry) % 10;
-        carry = (n1 * n2 + carry) / 10;
-        tmp = char('0' + remainder) + tmp;
+    if(num2=="0" || num1=="0")
+      return "0";
+    string res = "0";
+    string oneCmultOneS = "";
+    string rightzero="";
+    int jw = 0;
+    int r = 0;
+    for (int i = num1.size() - 1; i >= 0; i--) {
+      oneCmultOneS="";
+      r=0;
+      jw=0;
+      for (int j = num2.size() - 1; j >= 0; j--) {
+        r = (num2[j] - '0') * (num1[i] - '0') + jw;
+        jw = r / 10;
+        oneCmultOneS.push_back(r%10+'0');
       }
-      if (carry > 0)
-        tmp = char('0' + carry) + tmp;
-      tmp += base;
-
-      for (j = r.size()-1; j >= 0; j--) {
-        tmpsum = char('0' + (tmp[j] + carry + r[j] - '0' - '0') % 10) + tmpsum;
-        carry = (tmp[j] + carry + r[j] - '0' - '0') / 10;
-      }
-      for (j = r.size()-1; j < tmp.size(); j--) {
-        tmpsum = char('0' + (tmp[j] + carry - '0') % 10) + tmpsum;
-        carry = (tmp[j] + carry - '0') / 10;
-      }
-      if (carry > 0)
-        tmpsum = '1' + tmpsum;
-      r = tmpsum;
-      base += "0";
+      if(jw != 0)
+        oneCmultOneS.push_back(jw+'0');
+      reverse(oneCmultOneS.begin(),oneCmultOneS.end());
+      res=strAdd(res, oneCmultOneS+rightzero);
+      rightzero+="0";
     }
-    return r;
+
+    return res;
   }
 };
-int main(int argc, char const *argv[]) {
-  Solution().multiply("123", "456");
-  return 0;
+int main(){
+  Solution().multiply("11","99");
 }
