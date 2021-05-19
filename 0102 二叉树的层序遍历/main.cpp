@@ -11,30 +11,33 @@
  */
 class Solution {
 public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        queue<TreeNode*> q;
-        TreeNode *node=root;
-        q.push(node);
-        int currentNodeSize;
-        vector<vector<int>> res;
-        if(root == nullptr)
-            return res;
-        while(q.size()!=0){
-            vector<int> tmp{};
-            currentNodeSize = q.size();
-            for(int i=0;i<currentNodeSize;i++){
-                node=q.front();
-                q.pop();
-                if(node->left){
-                    q.push(node->left);
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        if(root==nullptr)
+            return {};
+        vector<TreeNode*> stk{root};
+        int n=stk.size();
+        int lastn=0;
+        vector<vector<int>> ans;
+        bool even=false;
+        while(lastn!=n){
+            deque<int> tmp;
+            for(int i=lastn;i<n;i++){
+                TreeNode* node = stk[i];
+                if(even){
+                    tmp.push_front(node->val);
+                }else{
+                    tmp.push_back(node->val);
                 }
-                if(node->right){
-                    q.push(node->right);
-                }
-                tmp.push_back(node->val);
+                if(node->left)
+                    stk.push_back(node->left);
+                if(node->right)
+                    stk.push_back(node->right);
             }
-            res.push_back(tmp);
+            lastn=n;
+            n=stk.size();
+            ans.emplace_back(vector<int>{tmp.begin(),tmp.end()});
+            even=!even;
         }
-        return res;
+        return ans;
     }
 };
